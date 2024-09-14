@@ -1,101 +1,103 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { Stethoscope, Paperclip, ArrowRight, Mic, MessageSquare, ChevronDown, Eye } from 'lucide-react'
+import SSOPopup from '../components/components-sso-popup'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [query, setQuery] = useState('')
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isSignupOpen, setIsSignupOpen] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-[#f9f5f1] p-6 font-sans">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold text-gray-700">
+            Auxilium<span className="text-purple-500">.</span>
+          </h1>
+          <div className="flex space-x-2">
+            <button
+              className="bg-white text-gray-700 px-4 py-2 rounded-full text-sm shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400"
+              aria-label="Login"
+              onClick={() => setIsLoginOpen(true)}
+            >
+              Login
+            </button>
+            <button
+              className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm shadow-sm hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400"
+              aria-label="Sign Up"
+              onClick={() => setIsSignupOpen(true)}
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Stethoscope className="text-purple-500" aria-hidden="true" />
+              <h2 className="text-4xl font-serif text-gray-800">Good afternoon</h2>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <div className="relative">
+                <textarea
+                  className="w-full h-24 p-2 pr-28 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  placeholder="How can Auxilium help you today?"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  aria-label="Query input"
+                />
+                <div className="absolute bottom-2 right-2 flex space-x-2">
+                  <button
+                    className="p-2 text-gray-400 hover:text-purple-500 focus:outline-none"
+                    aria-label="Attach file"
+                  >
+                    <Paperclip className="w-5 h-5" />
+                  </button>
+                  <button
+                    className="p-2 text-gray-400 hover:text-purple-500 focus:outline-none"
+                    aria-label="Voice input"
+                  >
+                    <Mic className="w-5 h-5" />
+                  </button>
+                  <button
+                    className="p-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    aria-label="Send message"
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-700 flex items-center">
+                <MessageSquare className="w-5 h-5 mr-2" />
+                Your recent chats
+                <ChevronDown className="w-4 h-4 ml-1" />
+              </h3>
+              <button className="text-gray-600 hover:underline flex items-center">
+                View all
+                <Eye className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[...Array(6)].map((_, index) => (
+                <div key={index} className="bg-white rounded-lg shadow-sm p-4 h-24">
+                  {/* Empty box for recent chat */}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <SSOPopup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} mode="login" />
+      <SSOPopup isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} mode="signup" />
     </div>
-  );
+  )
 }
