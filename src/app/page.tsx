@@ -1,103 +1,124 @@
 'use client'
 
-import { useState } from 'react'
-import { Stethoscope, Paperclip, ArrowRight, Mic, MessageSquare, ChevronDown, Eye } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, X, Send, LogOut, Mic, Paperclip } from 'lucide-react'
 import SSOPopup from '../components/components-sso-popup'
+
+const suggestedPrompts = [
+  { text: "Explain Medicare Part A coverage and benefits", icon: '🏥' },
+  { text: "How do I enroll in Medicare Part B?", icon: '📝' },
+  { text: "What's the difference between Medicare and Medicaid?", icon: '🤔' },
+  { text: "Find Medicare-approved doctors near me", icon: '👨‍⚕️' },
+]
 
 export default function Home() {
   const [query, setQuery] = useState('')
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isSignupOpen, setIsSignupOpen] = useState(false)
+  const [isSignInOpen, setIsSignInOpen] = useState(true)
+  const [user, setUser] = useState<{ name: string } | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isGreetingVisible, setIsGreetingVisible] = useState(false)
+
+  useEffect(() => {
+    setIsGreetingVisible(true)
+  }, [])
+
+  const handleLogin = (userData: { name: string }) => {
+    setUser(userData)
+    setIsSignInOpen(false)
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+  }
 
   return (
-    <div className="min-h-screen bg-[#f9f5f1] p-6 font-sans">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold text-gray-700">
-            Auxilium<span className="text-purple-500">.</span>
-          </h1>
-          <div className="flex space-x-2">
-            <button
-              className="bg-white text-gray-700 px-4 py-2 rounded-full text-sm shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400"
-              aria-label="Login"
-              onClick={() => setIsLoginOpen(true)}
-            >
-              Login
-            </button>
-            <button
-              className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm shadow-sm hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-400"
-              aria-label="Sign Up"
-              onClick={() => setIsSignupOpen(true)}
-            >
-              Sign Up
-            </button>
-          </div>
+    <div className="flex h-screen bg-[#f0f0f0] text-gray-900">
+      {/* Sidebar */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0`}>
+        <div className="flex items-center justify-between p-4">
+          <h1 className="text-2xl font-semibold">Auxilium<span className="text-[#0077C0]">.</span></h1>
+          <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden">
+            <X className="h-6 w-6" />
+          </button>
         </div>
+        <nav className="mt-8">
+          <a href="#" className="block py-2 px-4 text-gray-600 hover:bg-gray-100 hover:text-[#0077C0]">New chat</a>
+          <a href="#" className="block py-2 px-4 text-gray-600 hover:bg-gray-100 hover:text-[#0077C0]">Settings</a>
+          <a href="#" className="block py-2 px-4 text-gray-600 hover:bg-gray-100 hover:text-[#0077C0]">Help</a>
+        </nav>
+      </div>
 
-        <div className="max-w-3xl mx-auto space-y-6">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Stethoscope className="text-purple-500" aria-hidden="true" />
-              <h2 className="text-4xl font-serif text-gray-800">Good afternoon</h2>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <div className="relative">
-                <textarea
-                  className="w-full h-24 p-2 pr-28 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
-                  placeholder="How can Auxilium help you today?"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  aria-label="Query input"
-                />
-                <div className="absolute bottom-2 right-2 flex space-x-2">
-                  <button
-                    className="p-2 text-gray-400 hover:text-purple-500 focus:outline-none"
-                    aria-label="Attach file"
-                  >
-                    <Paperclip className="w-5 h-5" />
-                  </button>
-                  <button
-                    className="p-2 text-gray-400 hover:text-purple-500 focus:outline-none"
-                    aria-label="Voice input"
-                  >
-                    <Mic className="w-5 h-5" />
-                  </button>
-                  <button
-                    className="p-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400"
-                    aria-label="Send message"
-                  >
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-700 flex items-center">
-                <MessageSquare className="w-5 h-5 mr-2" />
-                Your recent chats
-                <ChevronDown className="w-4 h-4 ml-1" />
-              </h3>
-              <button className="text-gray-600 hover:underline flex items-center">
-                View all
-                <Eye className="w-4 h-4 ml-1" />
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="bg-white shadow-sm p-4 flex items-center justify-between">
+          <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden">
+            <Menu className="h-6 w-6" />
+          </button>
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <>
+                <span>{user.name}</span>
+                <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-[#0077C0]">
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </>
+            ) : (
+              <button onClick={() => setIsSignInOpen(true)} className="text-sm text-gray-600 hover:text-[#0077C0]">
+                Sign in
               </button>
+            )}
+          </div>
+        </header>
+
+        {/* Chat area */}
+        <main className="flex-1 overflow-y-auto p-4">
+          <div className="max-w-3xl mx-auto space-y-8">
+            <div className={`transition-all duration-1000 ease-in-out ${isGreetingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+              <h2 className="text-4xl font-bold mb-2">
+                <span className="text-[#0077C0]">Hello</span>
+                {user && <span className="text-gray-700">, {user.name}</span>}
+              </h2>
+              <p className="text-2xl text-gray-600">How can I help you today?</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm p-4 h-24">
-                  {/* Empty box for recent chat */}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {suggestedPrompts.map((prompt, index) => (
+                <div key={index} className="bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+                  <p className="text-gray-700">{prompt.text}</p>
+                  <span className="text-2xl mt-2 block">{prompt.icon}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </main>
+
+        {/* Input area */}
+        <div className="bg-white shadow-md p-4">
+          <div className="max-w-3xl mx-auto relative">
+            <input
+              type="text"
+              placeholder="Enter a prompt here"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full bg-gray-100 text-gray-900 placeholder-gray-500 rounded-lg py-3 px-4 pr-24 focus:outline-none focus:ring-2 focus:ring-[#0077C0]"
+            />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
+              <button className="text-gray-500 hover:text-[#0077C0]" aria-label="Attach file">
+                <Paperclip className="h-5 w-5" />
+              </button>
+              <button className="text-gray-500 hover:text-[#0077C0]" aria-label="Voice input">
+                <Mic className="h-5 w-5" />
+              </button>
+              <button className="text-[#0077C0] hover:text-[#0066A0]" aria-label="Send message">
+                <Send className="h-5 w-5" />
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <SSOPopup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} mode="login" />
-      <SSOPopup isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} mode="signup" />
+      <SSOPopup isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} mode="signin" onLogin={handleLogin} />
     </div>
   )
 }
